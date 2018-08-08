@@ -16,8 +16,8 @@
         </form>
 
         <div>
-            <div ng-repeat="message in messageList track by message.id">
-                {{message.doc.nickname}}: {{message.doc.content}}
+            <div ng-repeat="message in $root.messageList track by message._id">
+                {{message.nickname}}: {{message.content}}
             </div>
         </div>
     </div>

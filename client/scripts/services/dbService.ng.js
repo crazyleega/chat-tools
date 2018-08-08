@@ -1,6 +1,6 @@
 import PouchDB from 'pouchDB';
+PouchDB.plugin(require('pouchdb-find'));
 
-PouchDB.plugin(require('pouchdb-authentication'));
 
 const CHAT_HOST_URL = 'http://localhost:5984';
 const CHAT_HOST_USERNAME = 'admin';
@@ -49,25 +49,42 @@ app.factory('dbService',['$rootScope',function($rootScope){
       var _this = this;
 
       _this.getLocalDB(dbName).sync(this.getRemoteDB(dbName),{
-        live:true,
-        retry:true
+        //live:true,
+        //retry:true
       }).on('complete', function(info) {
         console.log('complete');
       }).on('error', function(err) {
+        setTimeout(function(){
+          this.syncToServer(dbName);
+        },3000);
         console.log(err)
       });
 
     },
     getMessageFromServer:function(dbName,callback){
-      this.getRemoteDB(dbName).allDocs({
-        skip:0,
-        limit:10,
-        descending:true,
-        include_docs: true
-      },function(err,response){
-        if(callback && (typeof(callback) === 'function')) {
-          callback(err,response);
-        }
+      //this.getRemoteDB(dbName).allDocs({
+      //  skip:0,
+      //  limit:50,
+      //  descending:false,
+      //  include_docs: true
+      //},function(err,response){
+      //  if(callback && (typeof(callback) === 'function')) {
+      //    callback(err,response);
+      //  }
+      //})
+      this.getRemoteDB(dbName).createIndex({index: {fields: ['time']}}).then( () => {
+        this.getRemoteDB(dbName).find({
+          skip:0,
+          limit:50,
+          selector: {
+            time: {$gte: 1}
+          },
+          sort: [{time: 'asc'}]
+        },function(err,result){
+          if(callback && (typeof(callback) === 'function')) {
+            callback(err,result);
+          }
+        })
       })
 
 
