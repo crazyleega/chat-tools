@@ -15,5 +15,5 @@ app.run(['$rootScope','socketService',function($rootScope,socketService){
   //           2、MQ
   //           3、socketio
   //           4、etc...
-  socketService.connectSocket();
+   socketService.connectSocket();
 }])

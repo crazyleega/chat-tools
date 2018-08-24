@@ -2,7 +2,8 @@ import { WebApp } from 'meteor/webapp';
 import http from 'http';
 import socket_io from 'socket.io';
 
-const PORT = 8080
+const PORT = 8080;
+userList = [];
 
 
 //设置CORS
@@ -17,11 +18,27 @@ Meteor.startup(() => {
   const io = socket_io(server);
 
   io.on('connection', function(socket) {
-    console.log('new socket client');
+
+
+    //监听新用户的进入
+    socket.on('new user', function(username){
+      if(userList.indexOf(username) == -1){
+        userList.push(username);
+      }
+      socket.name = username;
+      socket.broadcast.emit('system message',username + '进入网站。',userList);
+    });
+
     socket.on('new message', function(msg){
       console.log('message: ' + msg);
       socket.broadcast.emit('notify',msg);
     });
+
+
+    socket.on('disconnect', function() {
+      console.log('is in server disconnect',socket.name);
+      socket.broadcast.emit('system message',socket.name + '离开网站。',userList);
+    })
   });
 
   // Start server
@@ -32,4 +49,10 @@ Meteor.startup(() => {
   }
 });
 
+Meteor.methods({
+  getAllUser(){
+    console.log(userList);
+    return userList;
+  }
+});
 

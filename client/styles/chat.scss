@@ -1,6 +1,28 @@
 .chat-page{
 
+    .header{
+        position: fixed;
+        top: 0;
+        z-index:99;
+        background-color: white;
+        height:50px;
+        line-height:50px;
+    }
     textarea{
         resize: none;
+    }
+
+    .content{
+        margin-top:50px;
+        padding-bottom:220px;
+    }
+    .footer{
+        position: fixed;
+        bottom: 0;
+        height: 200px;
+        line-height: 60px;
+        z-index:99;
+        background-color: white;
+        padding:0 !important;
     }
 }

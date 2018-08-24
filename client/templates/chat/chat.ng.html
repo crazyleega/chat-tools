@@ -1,12 +1,27 @@
-<div class="chat-page">
-    <div class="container mt60">
+<div class="chat-page container">
+    <nav class="navbar header">
         <div>
             Current room number : {{roomNumber}}
+            <span class="ml20">
+                Nickname: {{nickname}}
+            </span>
         </div>
+    </nav>
+    <div class="content">
         <div>
-            Nickname: {{nickname}}
+            <div ng-repeat="message in $root.messageList track by message._id">
+                <div class="text-center c-blue"  ng-if="message.isPublic">
+                    {{message.content}}
+                </div>
+                <div ng-if="!message.isPublic">
+                    {{message.nickname}}: {{message.content}}
+                </div>
+
+            </div>
         </div>
-        <form ng-submit="submit()">
+    </div>
+    <footer class="footer container">
+        <form ng-submit="submit()" class="footer-form">
             <div class="mt10">
                 <textarea class="form-control" rows="5" ng-model="content" required></textarea>
             </div>
@@ -15,10 +30,5 @@
             </div>
         </form>
 
-        <div>
-            <div ng-repeat="message in $root.messageList track by message._id">
-                {{message.nickname}}: {{message.content}}
-            </div>
-        </div>
-    </div>
+    </footer>
 </div>

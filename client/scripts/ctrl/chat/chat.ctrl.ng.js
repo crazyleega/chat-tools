@@ -15,8 +15,6 @@ app.controller('chatCtrl',['$scope','dbService','$rootScope','$stateParams','$st
 
   ///type  1 私聊   2  群聊
   $scope.submit = function(){
-    console.log($scope.nickname);
-    console.log($scope.content);
     let time = Date.now();
     dbService.insertMessage({
       dbName:$scope.roomNumber,
@@ -59,6 +57,18 @@ app.controller('chatCtrl',['$scope','dbService','$rootScope','$stateParams','$st
     });
   }
 
+  $scope.getAllUser = function(){
+    Meteor.call('getAllUser',(error, result) => {
+      if(!error){
+        $rootScope.safeApply(function(){
+          //console.log(result);
+          $rootScope.userList = result
+        })
+      }
+    })
+  }
+
+  $scope.getAllUser();
   $scope.getMessagesFromServer();
 
   //$scope.$on("$destroy",function(){

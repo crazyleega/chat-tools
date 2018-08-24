@@ -1,4 +1,4 @@
-app.controller('loginCtrl',['$scope','$state',function($scope,$state){
+app.controller('loginCtrl',['$scope','$state','$rootScope',function($scope,$state,$rootScope){
 
   $scope.roomNumber = '';
   $scope.nickname = '';
@@ -7,6 +7,9 @@ app.controller('loginCtrl',['$scope','$state',function($scope,$state){
     console.log($scope.roomNumber);
     console.log($scope.nickname);
     localStorage.setItem('nickname',$scope.nickname);
+
+    $rootScope.socket.emit('new user',$scope.nickname);
+
     $state.go('chatroom',{roomNumber:$scope.roomNumber})
   }
 }])
